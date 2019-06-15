@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	<title>Profile</title>
+	<meta name="google-site-verification" content="YQJsV-OcpGUYDkw3CiVRz3wUI3e1tqkW4SWntSWpo90" />
+		<meta name="google-signin-scope" content="profile email">
+
+		<meta name="google-signin-client_id" content="572427904125-4j1n9s5m55he12v376hkrg8guud38tde.apps.googleusercontent.com">
+		<link href="/static/css/bootstrap.css" rel="stylesheet">
+		<link rel="stylesheet" href="widthhttps://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="/static/css/c.css">
+		<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+
+
+
+
+
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row">
+				<form action="/index"> 
+			<center><button type="submit" class="btn btn-default" >
+				<span class="glyphicon glyphicon-home"><p>MSIT Confessions</p></span>
+			</button></center>	
+			</form>	
+
+			</div>
+			<div class="row">
+				<div class="col-sm-5">
+					{% if Img != "No" %}
+					<img class="img-responsive img-rounded" src="{{url_for('static',filename=Img)}}" style="width:50%;height:80%" >
+
+					{% endif %}
+					<form action="/update" enctype="multipart/form-data" method="POST">
+					
+						<p><input type="file" name="file" onchange="openFile(event)" accept="image/*"></p>
+						<input type="submit" value=Update>
+					</form>
+				</div>
+				<div class="col-sm-7">
+				    <h2>Name   : {{Name}}<h2>
+					<h2>Mail   : {{Email}}<h2>
+					<h2>DOB    : {{Birthday}}<h2>
+					<h2>Gender : {{gender}}<h2>
+					<h2>Phone  : {{mobile}}<h2>
+					
+				</div>
+				
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+			<form action="/editdetails/{{Email}}" enctype="multipart/form-data" method="POST">
+			<div class="row modal fade" id="myEditDetails" role="dialog">
+				<div class="well well-lg">
+					<p><input type="text" name="name" placeholder="Name"></p>
+					<br>
+					<p><input type="tel" name="phone" pattern="[0-9]{10}" placeholder="Mobile Number"></p>
+
+			<center><button type="submit" class="btn btn-default" value=Upload>Update</button></center>		
+				</div>
+			</div>
+			</form>
+
+				<button type="button" class="btn btn-default" onclick="submit" id="myEditDetailsBtn"><span class="glyphicon glyphicon-edit"></span>
+				Edit Details</button>
+				</div>
+				
+			</div>
+			
+		</div>
+	
+		<script>
+			var openFile = function(event) {
+			var input = event.target;
+			var reader = new FileReader();
+			console.log(reader);
+			reader.onload = function(){
+			  var dataURL = reader.result;
+			  var output = document.getElementById('op');
+			  output.src = dataURL;
+			  // document.getElementById("output").src = dataURL;
+
+			};
+			reader.readAsDataURL(input.files[0]);
+		  };
+
+
+$().ready(function(){
+  $("#myEditDetailsBtn").click(function(){
+    $("#myEditDetails").modal();
+  });
+});
+		</script>
+	</body>
+</html>

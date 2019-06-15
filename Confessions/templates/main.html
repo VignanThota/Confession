@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <style>
+		
+	input[type="file"] {
+		display: none;
+	}
+	.close {
+	  cursor: pointer;
+	  position: absolute;
+	  top: 50%;
+	  right: 0%;
+	  padding: 12px 16px;
+	  transform: translate(0%, -50%);
+	}
+
+	.close:hover {background: #bbb;}
+	.col-container {
+	  display: table;
+	  width: 100%;
+	}
+	.col {
+	  display: table-cell;
+	  padding: 10px;
+	}
+	.sz{
+		height: 75%
+	}
+	.sz1{
+		height: 85%
+	}
+	.sz2{
+		height: 10%
+	}
+	.sz3{
+		height: 100%
+	}
+	</style>
+</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="page-header">
+					<div class="well well-sm">
+						<div class="row">
+							<div class="form-group col-sm-8"><h1><center>MSIT CONFESSIONS</center></h1></div>
+							<div class="form-group col-sm-2">
+								<a href="/About">
+          							<span class="glyphicon glyphicon-user" style="font-size: 510%"></span> 
+        						</a>
+							</div>
+							<div class="form-group col-sm-2">
+								<center>
+									<a href="/logout">
+										<span class="glyphicon glyphicon-log-out" style="font-size: 510%"></span>
+									</a>
+								</center>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<form action="/upload" enctype="multipart/form-data" method="POST">
+			<div class="row modal fade" id="myModal" role="dialog">
+				<div class="well well-lg">
+			<div class="row">
+				<div class="form-group col-sm-10">
+			    	<button type="button" class="close" data-dismiss="modal">&times;</button>
+			    	<textarea class="form-control" rows="4" id="comment" name = article placeholder="Confess your thoughts here..."></textarea>
+				</div> 
+				<div class="form-group col-sm-2">
+					<p id="output"></p>
+				    <center><label class="glyphicon glyphicon-camera" style="font-size: 50" id="cam" disabled ><input type="file" name="file" onchange="openFile(event)" accept="image/*" ></label></center>
+				</div> 
+			</div>  
+			<!-- <input type="submit" value=Upload> -->
+			<center><button type="submit" class="btn btn-default" value=Upload>Confess</button></center>		
+				</div>
+			</div>
+			</form>
+
+
+    <center><button type="button" class="btn btn-info btn-lg" id="myBtn">Shoot a Confession</button></center><br>
+
+
+
+			<div class="row">
+				{% autoescape off %}
+					{% for x in name %}
+
+    			<div class="col col-sm-8 sz" >
+			<form action="/delete/{{x.id}}/{{x.email}}" method="POST">
+
+						<button type="submit" class="close" onclick="submit">&times;</button>
+					</form>
+
+					{% if x.email == email %}
+						<form action="/edit/{{x.id}}/{{x.email}}" enctype="multipart/form-data" method="POST">
+
+			<div class="row modal fade" id="{{x.id}}{{x.id}}{{x.id}}{{x.id}}" role="dialog" >
+				<div class="well well-lg">
+			<div class="row">
+				<div class="form-group col-sm-10">
+			    	<button type="button" class="close" data-dismiss="modal">&times;</button>
+			    	<textarea class="form-control" rows="4" id="comment" name = article >{{x.title}}</textarea>
+				</div> 
+				<div class="form-group col-sm-2">
+					<p id="output"></p>
+				    <center><label class="glyphicon glyphicon-camera" style="font-size: 50" id="cam" disabled ><input type="file" name="file" onchange="openFile(event)" accept="image/*" ></label></center>
+				</div> 
+			</div>  
+	
+			<center><button type="submit" class="btn btn-default" value=Upload>Confess</button></center>		
+				</div>
+			</div>
+			</form>
+
+				<button type="submit" id="{{x.id}}{{x.id}}{{x.id}}" onclick="openFi({{x.id}})">
+					<span class="glyphicon glyphicon-edit"></span></button>
+					
+					{% endif %}
+
+
+
+
+					<div class="well well-lg sz1">
+						<h3 class="more" style="text-align: justify;word-break: break-all">{{x.title}}</h3>
+						{% if x.imagename != "NO_IMG" %}
+							<center><img class="img-responsive img-rounded" src="{{url_for('static',filename=x.imagename)}}" style="height:10;width: 8;"></center>
+						  
+								
+						{% endif %}
+					</div>
+				<form action="/votes/{{x.id}}" method="POST">
+	    		<div class="col-sm-6">
+	    		<center>
+	    			<button type="submit" class="btn btn-info btn-lg" onclick="submit" name="voted" value="like">
+         				<span class="glyphicon glyphicon-thumbs-up" style="color:green">
+         					<p>{{x.upvotes}}</p>
+         				</span> 
+        			</button>
+	    		</center>
+	    		</div>
+		    	<div class="col-sm-6">
+		    		<center>
+		    			<button type="submit" class="btn btn-info btn-lg" onclick="submit" name="voted" value="dislike">
+	         				<span class="glyphicon glyphicon-thumbs-down" style="color: red">
+	         					<p>{{x.downvotes}}</p>
+	         				</span> 
+	        			</button>
+		    		</center>
+		    	</div>
+				</form>
+		    	</div>
+
+		    <div class="col col-sm-4 sz" >
+		    	<div class="well well-lg sz3">
+		    <div class="row modal fade" id="{{x.id}}{{x.id}}{{x.id}}v" role="dialog">
+		  	<div class="well well-lg">
+		  		<div class="row">
+		  			<div class="form-group col-sm-12">
+					    <button type="button" class="close" data-dismiss="modal">&times;</button>
+					<form action="/comment/{{x.id}}" method="POST">
+					    <textarea class="form-control" rows="4" id="comment" name = text placeholder="Comment"></textarea>
+		  		<center><button type="submit" class="btn btn-default" onclick="submit">Post</button></center>
+					    <!-- <input type=submit> -->
+					</form>
+		    		</div> 
+		    		
+		  		</div> 
+		  	</div>
+		  	</div>
+
+		   	<center>
+<button type="button" class="btn btn-info btn-lg" id="{{x.id}}{{x.id}}v" onclick="openFics({{x.id}})">Shoot a Comment</button>
+		   	</center><br>{% for y in cts%}
+		   			{% if x.id == y.idn and y.comment != None %}
+					<form action="/deletecomment/{{y.id}}" method="POST">
+						<button type="submit" class="close" onclick="submit">&times;vig</button>
+					</form>
+				<p style="text-align: justify;word-break: break-all">
+
+				{{ y.comment}}
+			</p><br>
+				{% endif %}
+				{% if x.email == email%}
+
+
+						    <div class="row modal fade" id="{{y.id}}{{y.id}}" role="dialog">
+		  	<div class="well well-lg">
+		  		<div class="row">
+		  			<div class="form-group col-sm-12">
+					    <button type="button" class="close" data-dismiss="modal">&times;</button>
+					<form action="/editcomment/{{y.id}}" method="POST">
+					    <textarea class="form-control" rows="4" id="comment" name = text >{{y.comment}}</textarea>
+		  		<center><button type="submit" class="btn btn-default" onclick="submit">Update</button></center>
+					    <!-- <input type=submit> -->
+					</form>
+		    		</div> 
+		    		
+		  		</div> 
+		  	</div>
+		  	</div>
+		   	{% if x.id == y.idn and y.comment != None %}
+
+		   	<center><button type="submit" class="btn btn-info btn-lg" id="{{y.id}}" onclick="openFic({{y.id}})" >
+		   	<span class="glyphicon glyphicon-edit"></span></button></center><br>
+				{% endif %}
+
+
+				{% endif %}
+		    {% endfor %}
+		      	</div>
+		    </div>
+		    {% endfor %}
+				{% endautoescape %}
+  		</div>
+
+		<script>
+	var openFile = function(event) {
+	var input = event.target;
+	var reader = new FileReader();
+	console.log(reader);
+	reader.onload = function(){
+	  var dataURL = reader.result;
+	  var output = document.getElementById('output').innerHTML='<img class="img-responsive img-rounded close" src='+dataURL+'>'
+	  ;
+	  output.src = dataURL;
+	};
+	reader.readAsDataURL(input.files[0]);
+  };
+function showDiv() {
+   document.getElementById('confess').style.display = "block";
+}
+
+$().ready(function(){
+  $("#myBtn").click(function(){
+    $("#myModal").modal();
+  });
+});
+function openFi(ids) {
+	console.log("Vignan is a good boy")
+	 var x = "#"+ids.toString()+ids.toString()+ids.toString()
+	 var y = "#"+ids.toString()+ids.toString()+ids.toString()+ids.toString()
+	 console.log(x)
+	 console.log(y)
+$().ready(function(){
+  $(x).click(function(){
+    $(y).modal();
+  });
+});
+}
+
+
+
+function openFic(ids) {
+	console.log("Vignan is a good boy")
+	 var x = "#"+ids.toString()
+	 var y = "#"+ids.toString()+ids.toString()
+	 console.log(x)
+	 console.log(y)
+$().ready(function(){
+  $(x).click(function(){
+    $(y).modal();
+  });
+});
+}
+
+function openFics(ids) {
+	console.log("Vignan is a good boy")
+	 var x = "#"+ids.toString()+ids.toString()+"v"
+	 var y = "#"+ids.toString()+ids.toString()+ids.toString()+"v"
+	 console.log(x)
+	 console.log(y)
+$().ready(function(){
+  $(x).click(function(){
+    $(y).modal();
+  });
+});
+}
+// $().ready(function(){
+//   $("#mycmt").click(function(){
+//     $("#myComment").modal();
+//   });
+// });
+
+// $().ready(function(){
+//   $("#mycmt").click(function(){
+//     $("#myComment").modal();
+//   });
+// });
+// $().ready(function(){
+//   $("#mycmt1").click(function(){
+//     $("#myComment1").modal();
+//   });
+// });
+
+
+
+
+</script>
+	</body>
+</html>
+			
+	
